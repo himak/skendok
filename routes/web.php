@@ -30,6 +30,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Odosielatel
     Route::delete('odosielatels/destroy', 'OdosielatelController@massDestroy')->name('odosielatels.massDestroy');
     Route::resource('odosielatels', 'OdosielatelController');
+
+    // Media
+    Route::get('media/{uuid}', 'MediaController@show')->name('media.show');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
     // Change password
@@ -73,4 +76,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'Frontend', 'middleware' => ['
     Route::post('frontend/profile', 'ProfileController@update')->name('profile.update');
     Route::post('frontend/profile/destroy', 'ProfileController@destroy')->name('profile.destroy');
     Route::post('frontend/profile/password', 'ProfileController@password')->name('profile.password');
+
+    // Media
+    Route::get('media/{uuid}', 'MediaController@show')->name('media.show');
 });

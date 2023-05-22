@@ -12,6 +12,8 @@ use App\Models\Post;
 use App\Models\Team;
 use Gate;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,7 +43,7 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        
+
          if (is_numeric($request->odosielatel_id) == false){
             $odosielatel = new Odosielatel;
             $odosielatel->odosielatel = $request->odosielatel_id;
@@ -50,16 +52,29 @@ class PostController extends Controller
             $requestData["odosielatel_id"]=$odosielatel->id;
         }else{
             $requestData=$request->all();
-        } 
+        }
 
         $post = Post::create($requestData);
 
+        //storage uploadovaných súborov scan (.pdf) do foldra  storage\app\mails
+        //Premenovanie súboru pred uložením na "{US_DateFormat}-Mail-{PostNr}.pdf"    20230420-Mail-56006.pdf
         if ($request->input('scan', false)) {
-            $post->addMedia(storage_path('tmp/uploads/' . basename($request->input('scan'))))->toMediaCollection('scan');
+            $filePath = storage_path('tmp/uploads/' . basename($request->input('scan')));
+            $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+            $post->addMedia($filePath)
+                ->setName(now()->format('Ymd') . '-Mail-' . $post->cislo)
+                ->setFileName(now()->format('Ymd') . '-Mail-' . $post->cislo . '.' . $extension)
+                ->toMediaCollection('scan', 'local');
         }
 
+        //storage uploadovaných súborov envelope (.jpg) do foldra  storage\app\envelopes
+        //Premenovanie súboru pred uložením na "{US_DateFormat}-Post-{PostNr}.jpg"    20230420-Post-56006.jpg
         if ($request->input('envelope', false)) {
-            $post->addMedia(storage_path('tmp/uploads/' . basename($request->input('envelope'))))->toMediaCollection('envelope');
+            $post->addMedia(storage_path('tmp/uploads/' . basename($request->input('envelope'))))
+                ->setName(now()->format('Ymd') . '-Post-' . $post->cislo)
+                ->setFileName(now()->format('Ymd') . '-Post-' . $post->cislo)
+                ->toMediaCollection('envelope', 'local');
         }
 
         if ($media = $request->input('ck-media', false)) {
@@ -93,7 +108,7 @@ class PostController extends Controller
             $requestData["odosielatel_id"]=$odosielatel->id;
         }else{
             $requestData=$request->all();
-        } 
+        }
 
         $post->update($requestData);
 

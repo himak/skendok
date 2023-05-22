@@ -43,6 +43,7 @@ trait MediaUploadingTrait
         return response()->json([
             'name'          => $name,
             'original_name' => $file->getClientOriginalName(),
+            'extension' => $file->getClientOriginalExtension()
         ]);
     }
 }

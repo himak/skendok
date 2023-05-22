@@ -44,11 +44,11 @@ class PostController extends Controller
         $post = Post::create($request->all());
 
         if ($request->input('scan', false)) {
-            $post->addMedia(storage_path('tmp/uploads/' . basename($request->input('scan'))))->toMediaCollection('scan');
+            $post->addMedia(storage_path('tmp/uploads/' . basename($request->input('scan'))))->toMediaCollection('mail', 'local');
         }
 
         if ($request->input('envelope', false)) {
-            $post->addMedia(storage_path('tmp/uploads/' . basename($request->input('envelope'))))->toMediaCollection('envelope');
+            $post->addMedia(storage_path('tmp/uploads/' . basename($request->input('envelope'))))->toMediaCollection('envelope', 'local');
         }
 
         if ($media = $request->input('ck-media', false)) {

@@ -68,17 +68,17 @@
                                             <input type="checkbox" disabled="disabled" {{ $post->accounting ? 'checked' : '' }}>
                                         </td>
                                         <td>
-                                            @if($post->scan)
-                                                <a href="{{ $post->scan->getUrl() }}" target="_blank">
-                                                    {{ trans('global.view_file') }}
-                                                </a>
+                                            @if($post->scans)
+                                                @foreach($post->scans as $media)
+                                                    <a href="{{ route('frontend.media.show', $media->uuid) }}">{{ trans('global.view_file') }}</a>
+                                                @endforeach
                                             @endif
                                         </td>
                                         <td>
-                                            @if($post->envelope)
-                                                <a href="{{ $post->envelope->getUrl() }}" target="_blank">
-                                                    {{ trans('global.view_file') }}
-                                                </a>
+                                            @if($post->envelopes)
+                                                @foreach($post->envelopes as $media)
+                                                    <a href="{{ route('frontend.media.show', $media->uuid) }}">{{ trans('global.view_file') }}</a>
+                                                @endforeach
                                             @endif
                                         </td>
                                         <td>
@@ -161,7 +161,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>

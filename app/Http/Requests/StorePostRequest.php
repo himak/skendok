@@ -22,9 +22,12 @@ class StorePostRequest extends FormRequest
                 'nullable',
             ],
             'cislo' => [
+                'required',
                 'string',
                 'nullable',
             ],
+//            'scan' => 'required|file',
+//            'envelope' => 'required|file',
         ];
     }
 }

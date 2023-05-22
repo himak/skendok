@@ -71,13 +71,13 @@ class Post extends Model implements HasMedia
         return $this->belongsTo(Odosielatel::class, 'odosielatel_id');
     }
 
-    public function getScanAttribute()
+    public function getScansAttribute()
     {
-        return $this->getMedia('scan')->last();
+        return $this->getMedia('scan');
     }
 
-    public function getEnvelopeAttribute()
+    public function getEnvelopesAttribute()
     {
-        return $this->getMedia('envelope')->last();
+        return $this->getMedia('envelope');
     }
 }
