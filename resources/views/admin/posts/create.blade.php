@@ -13,7 +13,7 @@
                         @csrf
                         <div class="form-group {{ $errors->has('date') ? 'has-error' : '' }}">
                             <label for="date">{{ trans('cruds.post.fields.date') }}</label>
-                            <input class="form-control date" type="text" name="date" id="date" value="{{ old('date') }}">
+                            <input class="form-control date" type="text" name="date" id="date" value="{{ old('date', now()->format('d.m.Y')) }}">
                             @if($errors->has('date'))
                                 <span class="help-block" role="alert">{{ $errors->first('date') }}</span>
                             @endif
